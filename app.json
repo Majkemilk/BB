@@ -1,22 +1,36 @@
 {
   "expo": {
-    "name": "BB",
+    "name": "Plantascape",
     "slug": "BB",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/images/icon.png",
-    "scheme": "bb",
+    "scheme": "plantascape",
     "userInterfaceStyle": "automatic",
     "newArchEnabled": true,
     "ios": {
-      "supportsTablet": true
+      "supportsTablet": true,
+      "bundleIdentifier": "com.bloomboard.app",
+      "infoPlist": {
+        "NSCalendarsUsageDescription": "This app needs access to your calendar to sync your tasks and due dates.",
+        "ITSAppUsesNonExemptEncryption": false
+      }
     },
     "android": {
       "adaptiveIcon": {
         "foregroundImage": "./assets/images/adaptive-icon.png",
         "backgroundColor": "#ffffff"
       },
-      "edgeToEdgeEnabled": true
+      "package": "com.bloomboard.app",
+      "edgeToEdgeEnabled": true,
+      "permissions": [
+        "android.permission.READ_CALENDAR",
+        "android.permission.WRITE_CALENDAR"
+      ],
+      "googleServicesFile": "./google-services.json",
+      "colors": {
+        "iconBackground": "#ffffff"
+      }
     },
     "web": {
       "bundler": "metro",
@@ -26,17 +40,33 @@
     "plugins": [
       "expo-router",
       [
-        "expo-splash-screen",
+        "expo-notifications",
         {
-          "image": "./assets/images/splash-icon.png",
-          "imageWidth": 200,
-          "resizeMode": "contain",
-          "backgroundColor": "#ffffff"
+          "icon": "./assets/images/icon.png",
+          "color": "#4CAF50"
         }
-      ]
+      ],
+      [
+        "expo-calendar",
+        {
+          "calendarPermission": "This app needs access to your calendar to sync your tasks and due dates."
+        }
+      ],
+      "expo-web-browser",
+      "expo-secure-store",
+      "@react-native-google-signin/google-signin"
     ],
     "experiments": {
       "typedRoutes": true
+    },
+    "extra": {
+      "router": {},
+      "eas": {
+        "projectId": "8e958367-8920-4c4a-87ea-686765174a76"
+      },
+      "EXPO_PUBLIC_GOOGLE_WEB_CLIENT_ID": "1068788791945-i7hn2ahmclsbtig16g1cm9jkcvepopk0.apps.googleusercontent.com",
+      "EXPO_PUBLIC_GOOGLE_ANDROID_CLIENT_ID": "1068788791945-deu06ru464guhsnhrtpj7e09i5dk8a5u.apps.googleusercontent.com",
+      "EXPO_PUBLIC_GOOGLE_IOS_CLIENT_ID": "1068788791945-u2oa5ciqacpkd41ls2hjia7d629oe8oe.apps.googleusercontent.com"
     }
   }
 }

@@ -31,9 +31,21 @@ yarn-error.*
 *.pem
 
 # local env files
+.env
 .env*.local
+google-services.json
 
 # typescript
 *.tsbuildinfo
 
 app-example
+
+# Ignore generated/backup files
+Errors/
+/*.png
+*_old.*
+e_book_1.html
+markdown_pdf.pdf
+markdown_pdf.txt
+app-example/
+supabase/.temp/
