@@ -1,1 +1,60 @@
+# Build iOS IPA locally on GitHub Actions and publish as artifact.
+# Trigger: manual (workflow_dispatch). Runner: macos-latest (free).
+# Requires: EXPO_TOKEN in repository secrets (from expo.dev account → Access tokens).
+# For first-time iOS credentials, run once interactively: eas build --platform ios --profile preview
+name: Build iOS IPA
 
+on:
+  workflow_dispatch:
+
+jobs:
+  build-ios:
+    runs-on: macos-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'npm'
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Install EAS CLI
+        run: npm install -g eas-cli
+
+      - name: Verify Expo auth (EXPO_TOKEN)
+        env:
+          EXPO_TOKEN: ${{ secrets.EXPO_TOKEN }}
+        run: |
+          if [ -z "${EXPO_TOKEN}" ]; then
+            echo "Missing EXPO_TOKEN secret. Add it in Settings → Secrets and variables → Actions."
+            exit 1
+          fi
+          eas whoami
+
+      - name: Run EAS local build (iOS IPA)
+        env:
+          EXPO_TOKEN: ${{ secrets.EXPO_TOKEN }}
+          EAS_LOCAL_BUILD_ARTIFACTS_DIR: ${{ github.workspace }}/ios-artifacts
+        run: |
+          eas build --platform ios --profile preview --local --non-interactive
+
+      - name: Normalize output filename (app.ipa)
+        run: |
+          ls -la "${GITHUB_WORKSPACE}/ios-artifacts" || true
+          IPA_PATH="$(ls -1 "${GITHUB_WORKSPACE}/ios-artifacts"/*.ipa 2>/dev/null | head -n 1 || true)"
+          if [ -z "${IPA_PATH}" ]; then
+            echo "No .ipa produced in ios-artifacts. See logs above."
+            exit 1
+          fi
+          cp "${IPA_PATH}" "${GITHUB_WORKSPACE}/ios-artifacts/app.ipa"
+
+      - name: Upload IPA artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: app-ipa
+          path: ${{ github.workspace }}/ios-artifacts/
