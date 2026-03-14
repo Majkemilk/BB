@@ -1,0 +1,10 @@
+id,email,created_at,updated_at,is_premium,stripe_customer_id,full_name,avatar_url,subscription_status,subscription_type,subscription_end_date
+116e9b3e-902e-4ad2-8571-0bd861223c21,majkemilk@gmail.com,2025-10-10 09:07:39.548904+00,2026-01-20 16:13:20.981605+00,false,,Paweł Klimowski,https://lh3.googleusercontent.com/a/ACg8ocLTavqw0gzAXwCCrQqNXYvgu1z9ntrW6qYxZ9RfgNpIgronwA=s96-c,,,
+2944bd13-dff8-44a7-af84-5db09541bc51,bobby.mellnick@gmail.com,2026-01-14 10:57:38.99582+00,2026-01-14 10:57:38.99582+00,false,,,,,,
+317e748a-24ac-4c66-8832-eeb06d5cc375,tester.google@gmail.com,2025-10-10 07:55:13.784547+00,2025-10-16 10:59:26.430057+00,false,,tester.google@gmail.com,,,,
+4e8e3cb1-19e9-43fa-adee-8db53c8a4bae,dominik.halfkann@gmail.com,2026-01-16 11:58:09.829483+00,2026-02-07 01:39:12.349113+00,false,,Dominik Halfkann,https://lh3.googleusercontent.com/a/ACg8ocJwQZSfIyQhHcd4xHNTBmFxvWfcjMqB6VSs7r1YlOpea-uu2T6F=s96-c,,,
+5d8eb218-6701-4aef-9be4-a5532e5cf28d,blue@test.com,2025-10-16 11:06:04.207748+00,2025-10-16 11:06:04.207748+00,false,,,,,,
+a798848b-6cee-4f08-8eb9-91d7f8f36791,plantascapeapp@gmail.com,2025-10-19 06:51:20.711363+00,2025-10-19 06:51:20.711363+00,false,,,,,,
+cf750c21-f1a8-4e16-8906-5e74dbad5316,testsub@test.com,2025-10-16 17:04:32.35284+00,2025-10-16 17:04:32.35284+00,false,,,,,,
+e61009c8-fa47-46e1-9fb8-ea7b22218bd3,mail.rochajose@gmail.com,2026-02-07 20:42:46.159501+00,2026-02-07 20:42:47.371601+00,false,,José Rocha,https://lh3.googleusercontent.com/a/ACg8ocLL2Lz7Zg11WtHf_F2L-5VRMJTSIo1xSGzmEVCguirUsX7HyyWo=s96-c,,,
+e7ea6778-9978-4f25-8968-8004a38d924b,bluestacks@test.com,2025-10-16 09:52:35.040233+00,2025-10-16 10:59:26.430057+00,false,,bluestacks@test.com,,,,

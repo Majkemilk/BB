@@ -3,6 +3,7 @@ import DateTimePicker from '@react-native-community/datetimepicker';
 import * as Calendar from 'expo-calendar';
 import * as Notifications from 'expo-notifications';
 import { Bell, ChevronDown, Clock, TestTube } from 'lucide-react-native';
+import { IS_OFFLINE_MODE } from '../../../utils/featureFlags';
 import React, { useEffect, useState } from 'react';
 import { Alert, ScrollView, StyleSheet, Switch, Text, TouchableOpacity, View } from 'react-native';
 
@@ -223,6 +224,10 @@ export default function NotificationSettingsScreen() {
   };
 
   const handleCalendarSyncToggle = async (isEnabled: boolean) => {
+    if (IS_OFFLINE_MODE && isEnabled) {
+      Alert.alert('Offline Mode', 'Calendar sync is disabled in offline mode.');
+      return;
+    }
     if (isEnabled) {
       const { status } = await Calendar.requestCalendarPermissionsAsync();
       if (status !== 'granted') {
@@ -258,6 +263,10 @@ export default function NotificationSettingsScreen() {
   };
 
   const handleTestNotification = async () => {
+    if (IS_OFFLINE_MODE) {
+      Alert.alert('Offline Mode', 'Notifications are disabled in offline mode.');
+      return;
+    }
     try {
       const { status } = await Notifications.getPermissionsAsync();
       if (status !== 'granted') {
@@ -402,6 +411,7 @@ export default function NotificationSettingsScreen() {
           )}
         </View>
 
+        {!IS_OFFLINE_MODE && (
         <View style={styles.section}>
           <Text style={styles.sectionTitle}>Calendar Sync 📅</Text>
           <Text style={styles.sectionDescription}>Automatically sync your tasks with a calendar on your device.</Text>
@@ -419,6 +429,7 @@ export default function NotificationSettingsScreen() {
             </View>
           )}
         </View>
+        )}
 
         <View style={styles.section}>
           <Text style={styles.sectionTitle}>Test Notifications 🧪</Text>

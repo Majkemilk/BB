@@ -1,8 +1,10 @@
 import { Task } from '@/contexts/TaskContext';
 import * as Calendar from 'expo-calendar';
 import { Alert } from 'react-native';
+import { IS_OFFLINE_MODE } from './featureFlags';
 
 const ensureCalendarPermissions = async (): Promise<boolean> => {
+  if (IS_OFFLINE_MODE) return false;
   const { status } = await Calendar.getCalendarPermissionsAsync();
   if (status === 'granted') {
     return true;
@@ -49,11 +51,9 @@ export async function createCalendarEvent(task: Task, calendarId: string): Promi
 }
 
 export async function updateCalendarEvent(eventId: string, task: Task): Promise<boolean> {
+  if (IS_OFFLINE_MODE) return false;
   const hasPermissions = await ensureCalendarPermissions();
-  if (!hasPermissions) {
-    return false;
-  }
-  
+  if (!hasPermissions) return false;
   try {
     if (!eventId || !task.dueDate) return false;
     const startDate = new Date(task.dueDate);
@@ -72,11 +72,9 @@ export async function updateCalendarEvent(eventId: string, task: Task): Promise<
 }
 
 export async function deleteCalendarEvent(eventId: string): Promise<boolean> {
+  if (IS_OFFLINE_MODE) return false;
   const hasPermissions = await ensureCalendarPermissions();
-  if (!hasPermissions) {
-    return false;
-  }
-  
+  if (!hasPermissions) return false;
   try {
     if (!eventId) return false;
     await Calendar.deleteEventAsync(eventId);

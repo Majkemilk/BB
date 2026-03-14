@@ -1,6 +1,7 @@
 import { useTasks } from '@/contexts/TaskContext';
 import { cancelTaskNotifications } from '@/utils/notifications';
 import * as Haptics from 'expo-haptics';
+import { IS_OFFLINE_MODE } from '../utils/featureFlags';
 import { Check, ChevronUp, Clock, Coffee, Flame, GitMerge, MoreHorizontal, Pencil, Repeat, Star, Trash2 } from 'lucide-react-native';
 import React, { useState } from 'react';
 import { Alert, LayoutAnimation, Platform, StyleSheet, Text, TouchableOpacity, UIManager, View } from 'react-native';
@@ -17,7 +18,7 @@ export const TaskItem = ({ task, onToggleComplete, onToggleMIT, onDelete, onEdit
 
   const handleDelete = async () => {
     // Haptic feedback for destructive action
-    Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium);
+    if (!IS_OFFLINE_MODE) Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium);
     
     const isRecurring = !!task.recurrence || !!task.parentTaskId || !!task.isRecurringTemplate;
     if (isRecurring) {
@@ -298,7 +299,7 @@ export const TaskItem = ({ task, onToggleComplete, onToggleMIT, onDelete, onEdit
       {expanded && (
         <View style={styles.actions}>
             <TouchableOpacity style={styles.replantButton} onPress={() => {
-              Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
+              if (!IS_OFFLINE_MODE) Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
               onEdit(task);
             }} activeOpacity={0.7}>
               <Pencil size={16} color="#666" />
@@ -310,7 +311,7 @@ export const TaskItem = ({ task, onToggleComplete, onToggleMIT, onDelete, onEdit
                 task.isMIT && styles.keyPlantButtonActive
               ]} 
               onPress={() => {
-                Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
+                if (!IS_OFFLINE_MODE) Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
                 onToggleMIT(task.id);
               }}
               activeOpacity={0.7}

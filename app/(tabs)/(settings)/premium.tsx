@@ -1,5 +1,6 @@
 import PremiumLoadingIndicator from '@/components/PremiumLoadingIndicator';
 import { useAuth } from '@/contexts/AuthContext';
+import { IS_OFFLINE_MODE } from '@/utils/featureFlags';
 import * as WebBrowser from 'expo-web-browser';
 import { CheckCircle, RefreshCw, Star } from 'lucide-react-native';
 import React, { useEffect, useState } from 'react';
@@ -19,7 +20,7 @@ const ANNUAL_PRICE_ID = 'price_1RgkrHDIZ9mfQMHFCA4UAAd6';   // TODO: Replace wit
 export default function PremiumScreen() {
   const [loading, setLoading] = useState(false);
   const [isStable, setIsStable] = useState(false);
-  const { session, userProfile, userProfileLoading } = useAuth();
+  const { user, userProfile, userProfileLoading } = useAuth();
   
   // Safe premium check with loading state
   const isPremium = userProfile?.is_premium ?? false;
@@ -50,24 +51,26 @@ export default function PremiumScreen() {
   }, [isStable, userProfileLoading, isPremium, isProfileLoaded, userProfile]);
 
   const handlePurchase = async (priceId: string) => {
+    if (IS_OFFLINE_MODE) {
+      Alert.alert('Offline', 'Purchases are not available in offline mode.');
+      return;
+    }
     setLoading(true);
     try {
-      if (!session?.access_token) {
+      const accessToken = (user as any)?.access_token ?? null;
+      if (!accessToken) {
         throw new Error('No valid session found. Please log in again.');
       }
-      
-      // Call Supabase Edge Function
       const res = await fetch(`${process.env.EXPO_PUBLIC_SUPABASE_URL}/functions/v1/create-checkout-session`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
-          'Authorization': `Bearer ${session.access_token}`,
+          'Authorization': `Bearer ${accessToken}`,
         },
         body: JSON.stringify({ priceId }),
       });
       const data = await res.json();
       if (!res.ok || !data.sessionId) throw new Error(data.error || 'Failed to create checkout session');
-      // Open Stripe Checkout in browser
       const checkoutUrl = `https://checkout.stripe.com/c/${data.sessionId}`;
       await WebBrowser.openBrowserAsync(checkoutUrl);
     } catch (e: any) {
@@ -78,9 +81,22 @@ export default function PremiumScreen() {
   };
 
   const handleRestore = async () => {
+    if (IS_OFFLINE_MODE) {
+      Alert.alert('Offline', 'Restore purchases is not available in offline mode.');
+      return;
+    }
     setLoading(true);
     try {
-      const { data, error } = await supabase.functions.invoke('restore-purchases');
+      const { createClient } = require('@supabase/supabase-js');
+      const supabase = createClient(
+        process.env.EXPO_PUBLIC_SUPABASE_URL,
+        process.env.EXPO_PUBLIC_SUPABASE_ANON_KEY
+      );
+      const { data: session } = await supabase.auth.getSession();
+      if (!session?.session?.access_token) throw new Error('Not signed in');
+      const { data, error } = await supabase.functions.invoke('restore-purchases', {
+        headers: { Authorization: `Bearer ${session.session.access_token}` },
+      });
       if (error) throw error;
       Alert.alert('Success', 'Your purchases have been restored!');
     } catch (error) {
@@ -91,23 +107,22 @@ export default function PremiumScreen() {
   };
 
   const handleManageSubscription = async () => {
+    if (IS_OFFLINE_MODE) {
+      Alert.alert('Offline', 'Subscription management is not available in offline mode.');
+      return;
+    }
     try {
-      if (!session?.access_token) {
-        throw new Error('No valid session found. Please log in again.');
-      }
-      
-      // Call Supabase Edge Function to create customer portal session
+      const accessToken = (user as any)?.access_token ?? null;
+      if (!accessToken) throw new Error('No valid session found. Please log in again.');
       const res = await fetch(`${process.env.EXPO_PUBLIC_SUPABASE_URL}/functions/v1/create-customer-portal-session`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
-          'Authorization': `Bearer ${session.access_token}`,
+          'Authorization': `Bearer ${accessToken}`,
         },
       });
       const data = await res.json();
       if (!res.ok || !data.url) throw new Error(data.error || 'Failed to create customer portal session');
-      
-      // Open Stripe Customer Portal in browser
       await WebBrowser.openBrowserAsync(data.url);
     } catch (e: any) {
       Alert.alert('Error', e.message || 'Failed to open subscription management.');
@@ -132,6 +147,9 @@ export default function PremiumScreen() {
           <Text style={styles.title}>You're Premium! 🌟</Text>
           <Text style={styles.subtitle}>Thank you for supporting Plantascape</Text>
         </View>
+        {IS_OFFLINE_MODE && (
+          <Text style={styles.offlineNote}>Offline mode – premium status from your local profile.</Text>
+        )}
         <View style={styles.featuresBox}>
           {PREMIUM_FEATURES.map((feature, idx) => (
             <View key={idx} style={styles.featureRow}>
@@ -145,9 +163,11 @@ export default function PremiumScreen() {
             Your premium subscription is active and all features are unlocked!
           </Text>
         </View>
-        <TouchableOpacity style={styles.manageButton} onPress={handleManageSubscription}>
-          <Text style={styles.manageButtonText}>Manage Subscription</Text>
-        </TouchableOpacity>
+        {!IS_OFFLINE_MODE && (
+          <TouchableOpacity style={styles.manageButton} onPress={handleManageSubscription}>
+            <Text style={styles.manageButtonText}>Manage Subscription</Text>
+          </TouchableOpacity>
+        )}
       </View>
     );
   }
@@ -159,6 +179,9 @@ export default function PremiumScreen() {
         <Text style={styles.title}>Unlock Your Full Potential</Text>
         <Text style={styles.subtitle}>Upgrade to Plantascape Premium</Text>
       </View>
+      {IS_OFFLINE_MODE && (
+        <Text style={styles.offlineNote}>Offline mode – purchases are disabled. Your limits are from your local profile.</Text>
+      )}
       <View style={styles.featuresBox}>
         {PREMIUM_FEATURES.map((feature, idx) => (
           <View key={idx} style={styles.featureRow}>
@@ -167,26 +190,30 @@ export default function PremiumScreen() {
           </View>
         ))}
       </View>
-      <View style={styles.buttonGroup}>
-        <TouchableOpacity
-          style={[styles.planButton, styles.monthlyButton]}
-          onPress={() => handlePurchase(MONTHLY_PRICE_ID)}
-          disabled={loading}
-        >
-          <Text style={styles.planButtonText}>Monthly Plan</Text>
-        </TouchableOpacity>
-        <TouchableOpacity
-          style={[styles.planButton, styles.annualButton]}
-          onPress={() => handlePurchase(ANNUAL_PRICE_ID)}
-          disabled={loading}
-        >
-          <Text style={styles.planButtonText}>Annual Plan</Text>
-        </TouchableOpacity>
-      </View>
-      <TouchableOpacity style={styles.restoreButton} onPress={handleRestore} disabled={loading}>
-        <RefreshCw size={18} color="#388E3C" style={{ marginRight: 6 }} />
-        <Text style={styles.restoreText}>Restore Purchases</Text>
-      </TouchableOpacity>
+      {!IS_OFFLINE_MODE && (
+        <>
+          <View style={styles.buttonGroup}>
+            <TouchableOpacity
+              style={[styles.planButton, styles.monthlyButton]}
+              onPress={() => handlePurchase(MONTHLY_PRICE_ID)}
+              disabled={loading}
+            >
+              <Text style={styles.planButtonText}>Monthly Plan</Text>
+            </TouchableOpacity>
+            <TouchableOpacity
+              style={[styles.planButton, styles.annualButton]}
+              onPress={() => handlePurchase(ANNUAL_PRICE_ID)}
+              disabled={loading}
+            >
+              <Text style={styles.planButtonText}>Annual Plan</Text>
+            </TouchableOpacity>
+          </View>
+          <TouchableOpacity style={styles.restoreButton} onPress={handleRestore} disabled={loading}>
+            <RefreshCw size={18} color="#388E3C" style={{ marginRight: 6 }} />
+            <Text style={styles.restoreText}>Restore Purchases</Text>
+          </TouchableOpacity>
+        </>
+      )}
       {loading && (
         <View style={styles.loadingOverlay}>
           <ActivityIndicator size="large" color="#388E3C" />
@@ -313,5 +340,12 @@ const styles = StyleSheet.create({
     color: '#8B4513',
     fontWeight: '600',
     fontSize: 16,
+  },
+  offlineNote: {
+    fontSize: 13,
+    color: '#666',
+    marginBottom: 12,
+    textAlign: 'center',
+    fontStyle: 'italic',
   },
 }); 

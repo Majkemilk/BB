@@ -28,7 +28,7 @@ export default function LoginScreen() {
   const [biometricLoading, setBiometricLoading] = useState(false);
   const [hasBiometricCredentials, setHasBiometricCredentials] = useState(false);
   const [isLoggingIn, setIsLoggingIn] = useState(false);
-  const { emailVerificationRequired } = useAuth();
+  const { emailVerificationRequired, signInOffline } = useAuth();
 
   // Configure Google Sign-In on component mount
   useEffect(() => {
@@ -106,10 +106,8 @@ export default function LoginScreen() {
     try {
       const { signInWithGoogle } = await import('../../utils/googleAuth');
       const result = await signInWithGoogle();
-      
       if (result.success) {
         console.log('Google sign-in successful:', result.user?.email);
-        // Navigation is handled by RootLayout once AuthContext updates
       } else {
         Alert.alert('Google Sign-In Error', result.error || 'Google sign-in failed');
       }
@@ -118,6 +116,16 @@ export default function LoginScreen() {
       console.error('Google sign-in error:', error);
     } finally {
       setGoogleLoading(false);
+    }
+  };
+
+  const handleContinueWithoutLogin = async () => {
+    try {
+      await signInOffline();
+      // Nawigacja do (tabs) nastąpi automatycznie po aktualizacji AuthContext
+    } catch (e) {
+      console.error('signInOffline error:', e);
+      Alert.alert('Błąd', 'Nie udało się wejść w tryb offline.');
     }
   };
 
@@ -226,12 +234,21 @@ export default function LoginScreen() {
             )}
           </TouchableOpacity>
 
-          {/* Social Login Buttons */}
+          {/* Social Login Buttons (Google tymczasowo wyłączony) */}
           <SocialLoginButtons
             onGooglePress={handleGoogleSignIn}
             loading={googleLoading}
             disabled={loading}
           />
+
+          {/* Kontynuuj bez logowania – dane lokalne z AsyncStorage */}
+          <TouchableOpacity
+            style={[styles.continueWithoutButton, (loading || googleLoading) && styles.buttonDisabled]}
+            onPress={handleContinueWithoutLogin}
+            disabled={loading || googleLoading}
+          >
+            <Text style={styles.continueWithoutButtonText}>Kontynuuj bez logowania</Text>
+          </TouchableOpacity>
 
           {/* Biometric Login Button */}
           {hasBiometricCredentials && (
@@ -415,6 +432,21 @@ const styles = StyleSheet.create({
     color: '#4CAF50',
     fontSize: 14,
     fontWeight: '500',
+  },
+  continueWithoutButton: {
+    backgroundColor: 'transparent',
+    borderRadius: 12,
+    paddingVertical: 14,
+    paddingHorizontal: 20,
+    alignItems: 'center',
+    marginTop: 12,
+    borderWidth: 1,
+    borderColor: '#4CAF50',
+  },
+  continueWithoutButtonText: {
+    color: '#4CAF50',
+    fontSize: 16,
+    fontWeight: '600',
   },
   biometricContainer: {
     marginTop: 16,

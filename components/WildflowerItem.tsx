@@ -1,5 +1,6 @@
 import { ResponsiveUtils } from '@/utils/responsive';
 import * as Haptics from 'expo-haptics';
+import { IS_OFFLINE_MODE } from '../utils/featureFlags';
 import { ArrowUpRight, ChevronUp, MoreHorizontal, Pencil, Sprout, Trash2 } from 'lucide-react-native';
 import React, { useState } from 'react';
 import { Alert, LayoutAnimation, Platform, StyleSheet, Text, TouchableOpacity, UIManager, View } from 'react-native';
@@ -39,9 +40,7 @@ export const WildflowerItem: React.FC<WildflowerItemProps> = ({
   const [justCompleted, setJustCompleted] = useState(false);
 
   const handleCompost = () => {
-    // Haptic feedback for destructive action
-    Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium);
-    
+    if (!IS_OFFLINE_MODE) Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium);
     Alert.alert(
       "🌿 Move to Compost Bin?", 
       "This wildflower will be moved to the Compost Bin for future restoration.",
@@ -68,10 +67,7 @@ export const WildflowerItem: React.FC<WildflowerItemProps> = ({
   const handleQuickHarvestAnimated = () => {
     if (justCompleted) return;
     setJustCompleted(true);
-    
-    // Haptic feedback for completion
-    Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium);
-    
+    if (!IS_OFFLINE_MODE) Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium);
     setTimeout(async () => {
       try {
         await onQuickHarvest(wildflower);
@@ -141,7 +137,7 @@ export const WildflowerItem: React.FC<WildflowerItemProps> = ({
           <TouchableOpacity 
             style={styles.plantButton} 
             onPress={() => {
-              Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
+              if (!IS_OFFLINE_MODE) Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
               handleQuickHarvestAnimated();
             }}
             activeOpacity={0.7}
@@ -152,7 +148,7 @@ export const WildflowerItem: React.FC<WildflowerItemProps> = ({
           <TouchableOpacity 
             style={styles.cultivateButton} 
             onPress={() => {
-              Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
+              if (!IS_OFFLINE_MODE) Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
               onNurture(wildflower);
             }}
             activeOpacity={0.7}
@@ -163,7 +159,7 @@ export const WildflowerItem: React.FC<WildflowerItemProps> = ({
           <TouchableOpacity 
             style={styles.tendButton} 
             onPress={() => {
-              Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
+              if (!IS_OFFLINE_MODE) Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
               onEdit(wildflower);
             }}
             activeOpacity={0.7}

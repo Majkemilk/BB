@@ -1,4 +1,5 @@
 import * as Haptics from 'expo-haptics';
+import { IS_OFFLINE_MODE } from '../utils/featureFlags';
 import { Pencil, Sprout, X } from 'lucide-react-native';
 import React, { useEffect, useState } from 'react';
 import { Alert, KeyboardAvoidingView, Modal, Platform, ScrollView, StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native';
@@ -28,7 +29,7 @@ export const NewWildflowerModal = ({ visible, onClose, onAdd, editingWildflower 
     }
     
     // Haptic feedback for important actions
-    Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium);
+    if (!IS_OFFLINE_MODE) Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium);
     setIsSaving(true);
     
     try {

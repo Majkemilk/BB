@@ -1,0 +1,28 @@
+[
+  {
+    "id": "116e9b3e-902e-4ad2-8571-0bd861223c21",
+    "email": "majkemilk@gmail.com",
+    "created_at": "2025-10-10T09:07:39.548904+00:00",
+    "updated_at": "2026-01-20T16:13:20.981605+00:00",
+    "is_premium": false,
+    "stripe_customer_id": null,
+    "full_name": "Paweł Klimowski",
+    "avatar_url": "https://lh3.googleusercontent.com/a/ACg8ocLTavqw0gzAXwCCrQqNXYvgu1z9ntrW6qYxZ9RfgNpIgronwA=s96-c",
+    "subscription_status": null,
+    "subscription_type": null,
+    "subscription_end_date": null
+  },
+  {
+    "id": "2944bd13-dff8-44a7-af84-5db09541bc51",
+    "email": "bobby.mellnick@gmail.com",
+    "created_at": "2026-01-14T10:57:38.99582+00:00",
+    "updated_at": "2026-01-14T10:57:38.99582+00:00",
+    "is_premium": false,
+    "stripe_customer_id": null,
+    "full_name": null,
+    "avatar_url": null,
+    "subscription_status": null,
+    "subscription_type": null,
+    "subscription_end_date": null
+  }
+]

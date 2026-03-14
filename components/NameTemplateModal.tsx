@@ -1,5 +1,6 @@
 import { useAuth } from '@/contexts/AuthContext';
 import * as Haptics from 'expo-haptics';
+import { IS_OFFLINE_MODE } from '../utils/featureFlags';
 import { useRouter } from 'expo-router';
 import { X } from 'lucide-react-native';
 import React, { useState } from 'react';
@@ -73,7 +74,7 @@ export default function NameTemplateModal({ visible, onClose, onSave, suggestedN
     
     if (name.trim() && !error) {
       // Haptic feedback for important actions
-      Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium);
+      if (!IS_OFFLINE_MODE) Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium);
       setIsSaving(true);
       
       try {

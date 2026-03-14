@@ -1,0 +1,52 @@
+[
+  {
+    "id": "29609532-4bb0-4c94-bc73-5a016f44c2d2",
+    "user_id": "e61009c8-fa47-46e1-9fb8-ea7b22218bd3",
+    "name": "Coding"
+  },
+  {
+    "id": "592f2dee-327f-4b6f-a11e-2def436f9849",
+    "user_id": "116e9b3e-902e-4ad2-8571-0bd861223c21",
+    "name": "Dłutowo"
+  },
+  {
+    "id": "98e87c10-465d-4e77-a0fc-7c03e9b8223e",
+    "user_id": "5162359d-d581-46ef-bbe7-fabc0ea212c8",
+    "name": "Work"
+  },
+  {
+    "id": "9c012704-e60f-465b-8e0c-2cc42262ea05",
+    "user_id": "116e9b3e-902e-4ad2-8571-0bd861223c21",
+    "name": "Telefony, komputery"
+  },
+  {
+    "id": "d15492c8-99e9-4317-9317-c9ea0c51b3a1",
+    "user_id": "5162359d-d581-46ef-bbe7-fabc0ea212c8",
+    "name": "Home"
+  },
+  {
+    "id": "d2656da4-e341-4fb4-8478-8f6818979025",
+    "user_id": "5162359d-d581-46ef-bbe7-fabc0ea212c8",
+    "name": "Hobby"
+  },
+  {
+    "id": "d8ce7876-7811-4fc8-a69c-f314a4002463",
+    "user_id": "116e9b3e-902e-4ad2-8571-0bd861223c21",
+    "name": "Dom"
+  },
+  {
+    "id": "e938c7f0-5c49-4060-909c-3a006827aa44",
+    "user_id": "116e9b3e-902e-4ad2-8571-0bd861223c21",
+    "name": "Gdańsk mieszkanie"
+  },
+  {
+    "id": "f89cf862-f595-492e-9d4b-9d78d6d94adb",
+    "user_id": "116e9b3e-902e-4ad2-8571-0bd861223c21",
+    "name": "Zofiewo"
+  },
+  {
+    "id": "fd52cf5c-2dc1-418f-b0d3-2aed23f6daae",
+    "user_id": "b5f9ee9c-391f-4683-b7b0-0d51284232e1",
+    "name": "Piwnica"
+  }
+]

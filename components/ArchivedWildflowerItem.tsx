@@ -1,4 +1,5 @@
 import * as Haptics from 'expo-haptics';
+import { IS_OFFLINE_MODE } from '../utils/featureFlags';
 import { Archive, ChevronUp, MoreHorizontal, RefreshCw, Trash2 } from 'lucide-react-native';
 import React, { useState } from 'react';
 import { Alert, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
@@ -29,7 +30,7 @@ export const ArchivedWildflowerItem = ({
   
   const handleDelete = async () => {
     // Haptic feedback for destructive action
-    Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium);
+    if (!IS_OFFLINE_MODE) Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium);
     
     Alert.alert(
       'Delete Idea Permanently',
@@ -42,7 +43,7 @@ export const ArchivedWildflowerItem = ({
             try {
               await onDelete(wildflower.id);
               // Success feedback
-              Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
+              if (!IS_OFFLINE_MODE) Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
               Alert.alert('Success', '🌿 Your Wildflower has been permanently cleared. Your garden now has more space for fresh ideas!');
             } catch (error) {
               console.error('Error in handleDelete:', error);
@@ -58,7 +59,7 @@ export const ArchivedWildflowerItem = ({
   const handleRestore = async () => {
     try {
       // Haptic feedback for restore action
-      Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
+      if (!IS_OFFLINE_MODE) Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
       await onRestore(wildflower.id);
     } catch (error) {
       console.error('Error in handleRestore:', error);

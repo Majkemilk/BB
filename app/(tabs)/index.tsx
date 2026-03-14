@@ -8,6 +8,7 @@ import { useOrientation } from '@/hooks/useOrientation';
 import { ResponsiveUtils } from '@/utils/responsive';
 import { useFocusEffect } from '@react-navigation/native';
 import * as Haptics from 'expo-haptics';
+import { IS_OFFLINE_MODE } from '../../utils/featureFlags';
 import { useRouter } from 'expo-router';
 import { ChevronDown, Flower, Plus, Search, SortAsc, Sparkles, Sprout, Star, Wheat } from 'lucide-react-native';
 import React, { useEffect, useMemo, useState } from 'react';
@@ -150,7 +151,7 @@ export default function IdeaMeadowScreen() {
         
         // Show success message after transplanting wildflower to task
         try {
-          Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
+          if (!IS_OFFLINE_MODE) Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
         } catch (hapticError) {
           // Haptic feedback not available
         }

@@ -1,5 +1,7 @@
+import AsyncStorage from '@react-native-async-storage/async-storage';
 import Constants from 'expo-constants';
 import { Platform } from 'react-native';
+import { IS_OFFLINE_MODE } from './featureFlags';
 
 interface Wildflower {
   id: string;
@@ -11,10 +13,7 @@ interface Wildflower {
 
 // Schedule wildflower reminder notifications
 export async function scheduleWildflowerReminder(wildflowers: Wildflower[]) {
-  if (!Constants.isDevice) {
-    return;
-  }
-
+  if (IS_OFFLINE_MODE || !Constants.isDevice) return;
   const Notifications = require('expo-notifications');
 
   if (Platform.OS === 'web') {
@@ -127,10 +126,7 @@ export async function scheduleWildflowerReminder(wildflowers: Wildflower[]) {
 
 // Cancel existing wildflower reminder notifications
 export async function cancelWildflowerReminders() {
-  if (!Constants.isDevice) {
-    return;
-  }
-
+  if (IS_OFFLINE_MODE || !Constants.isDevice) return;
   const Notifications = require('expo-notifications');
 
   if (Platform.OS === 'web') {

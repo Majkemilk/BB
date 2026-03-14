@@ -1,0 +1,32 @@
+[
+  {
+    "id": "5832ffe3-abfb-43df-a7c0-fbeac307360f",
+    "user_id": "116e9b3e-902e-4ad2-8571-0bd861223c21",
+    "name": "DIY"
+  },
+  {
+    "id": "79c04fbe-74b7-4636-b1b0-b298c6e67b88",
+    "user_id": "116e9b3e-902e-4ad2-8571-0bd861223c21",
+    "name": "Zakupy - wyposażenie domu"
+  },
+  {
+    "id": "b9f672e3-7e4b-491a-b295-abeff868703e",
+    "user_id": "116e9b3e-902e-4ad2-8571-0bd861223c21",
+    "name": "Naprawy"
+  },
+  {
+    "id": "df7ef0bc-9a9e-42e2-9ca0-5a1556124693",
+    "user_id": "116e9b3e-902e-4ad2-8571-0bd861223c21",
+    "name": "Rozliczenia"
+  },
+  {
+    "id": "e0a9397c-2b0a-480f-b8a7-3ad4629c0fa0",
+    "user_id": "b5f9ee9c-391f-4683-b7b0-0d51284232e1",
+    "name": "Quick"
+  },
+  {
+    "id": "fe2dc184-4fa6-4534-99de-7000142ace04",
+    "user_id": "b5f9ee9c-391f-4683-b7b0-0d51284232e1",
+    "name": "Laudy"
+  }
+]

@@ -1,0 +1,22 @@
+[
+  {
+    "id": "0405fa24-936c-4150-a857-9d02f1736f5a",
+    "user_id": "116e9b3e-902e-4ad2-8571-0bd861223c21",
+    "created_at": "2025-10-21T11:03:54.849069+00:00",
+    "title": "Wyrównać trawnik przy chodniku",
+    "description": null,
+    "updated_at": "2025-10-21T11:03:54.849069+00:00",
+    "is_archived": false,
+    "archived_at": null
+  },
+  {
+    "id": "048f976d-0f27-4ded-972c-6fad396dd2f4",
+    "user_id": "4e8e3cb1-19e9-43fa-adee-8db53c8a4bae",
+    "created_at": "2026-01-18T13:48:58.057891+00:00",
+    "title": "Mit Gymondo Ausdauer aufbauen",
+    "description": "Aber welche Tageszeit?",
+    "updated_at": "2026-01-18T13:48:58.057891+00:00",
+    "is_archived": false,
+    "archived_at": null
+  }
+]

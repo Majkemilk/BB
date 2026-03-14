@@ -1,6 +1,7 @@
 import { createClient } from '@supabase/supabase-js';
 import * as SecureStore from 'expo-secure-store';
 import { Alert } from 'react-native';
+import { IS_OFFLINE_MODE } from './featureFlags';
 import 'react-native-url-polyfill/auto';
 
 // Prawidłowy kod odczytujący zmienne środowiskowe
@@ -28,13 +29,14 @@ if (!supabaseUrl || !supabaseAnonKey) {
 // Supabase Storage Adapter using expo-secure-store
 const SupabaseStorageAdapter = {
   setItem: async (key: string, value: string) => {
-    await SecureStore.setItemAsync(key, value);
+    if (!IS_OFFLINE_MODE) await SecureStore.setItemAsync(key, value);
   },
   getItem: async (key: string) => {
+    if (IS_OFFLINE_MODE) return null;
     return await SecureStore.getItemAsync(key);
   },
   removeItem: async (key: string) => {
-    await SecureStore.deleteItemAsync(key);
+    if (!IS_OFFLINE_MODE) await SecureStore.deleteItemAsync(key);
   },
 };
 

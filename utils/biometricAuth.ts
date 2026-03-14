@@ -1,6 +1,7 @@
 import * as LocalAuthentication from 'expo-local-authentication';
 import * as SecureStore from 'expo-secure-store';
 import { BIOMETRIC_CONFIG, SECURE_STORE_KEYS } from './config';
+import { IS_OFFLINE_MODE } from './featureFlags';
 import { supabase } from './supabase';
 
 export interface BiometricAuthResult {
@@ -17,6 +18,9 @@ export interface BiometricCapabilities {
 
 // Check if device supports biometric authentication
 export const checkBiometricCapabilities = async (): Promise<BiometricCapabilities> => {
+  if (IS_OFFLINE_MODE) {
+    return { hasHardware: false, isEnrolled: false, supportedTypes: [] };
+  }
   try {
     const hasHardware = await LocalAuthentication.hasHardwareAsync();
     const isEnrolled = await LocalAuthentication.isEnrolledAsync();
@@ -39,6 +43,7 @@ export const checkBiometricCapabilities = async (): Promise<BiometricCapabilitie
 
 // Save user credentials securely after successful login
 export const saveUserCredentials = async (userId: string, refreshToken: string): Promise<boolean> => {
+  if (IS_OFFLINE_MODE) return false;
   try {
     await SecureStore.setItemAsync(SECURE_STORE_KEYS.USER_ID, userId);
     await SecureStore.setItemAsync(SECURE_STORE_KEYS.REFRESH_TOKEN, refreshToken);
@@ -51,6 +56,7 @@ export const saveUserCredentials = async (userId: string, refreshToken: string):
 
 // Retrieve saved user credentials
 export const getSavedCredentials = async (): Promise<{ userId: string; refreshToken: string } | null> => {
+  if (IS_OFFLINE_MODE) return null;
   try {
     const userId = await SecureStore.getItemAsync(SECURE_STORE_KEYS.USER_ID);
     const refreshToken = await SecureStore.getItemAsync(SECURE_STORE_KEYS.REFRESH_TOKEN);
@@ -67,6 +73,7 @@ export const getSavedCredentials = async (): Promise<{ userId: string; refreshTo
 
 // Clear saved credentials
 export const clearSavedCredentials = async (): Promise<void> => {
+  if (IS_OFFLINE_MODE) return;
   try {
     await SecureStore.deleteItemAsync(SECURE_STORE_KEYS.USER_ID);
     await SecureStore.deleteItemAsync(SECURE_STORE_KEYS.REFRESH_TOKEN);
@@ -77,8 +84,10 @@ export const clearSavedCredentials = async (): Promise<void> => {
 
 // Authenticate with biometrics and auto-login
 export const authenticateWithBiometrics = async (): Promise<BiometricAuthResult> => {
+  if (IS_OFFLINE_MODE) {
+    return { success: false, error: 'Biometric login is disabled in offline mode.' };
+  }
   try {
-    // Check if biometrics are available
     const capabilities = await checkBiometricCapabilities();
     
     if (!capabilities.hasHardware || !capabilities.isEnrolled) {
@@ -97,7 +106,6 @@ export const authenticateWithBiometrics = async (): Promise<BiometricAuthResult>
       };
     }
 
-    // Authenticate with biometrics
     const result = await LocalAuthentication.authenticateAsync(BIOMETRIC_CONFIG);
 
     if (!result.success) {

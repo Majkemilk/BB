@@ -1,5 +1,6 @@
 import { cancelTaskNotifications } from '@/utils/notifications';
 import * as Haptics from 'expo-haptics';
+import { IS_OFFLINE_MODE } from '../utils/featureFlags';
 import { CircleCheck as CheckCircle, ChevronUp, Filter, Flame, LayoutGrid, MoreHorizontal, RotateCcw, Star, Trash2 } from 'lucide-react-native';
 import React, { useState } from 'react';
 import { Alert, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
@@ -26,9 +27,7 @@ export const CompletedTaskItem = ({ task, onRestore, onDelete, selectMode = fals
   const [expanded, setExpanded] = useState(false);
   
   const handleDelete = async () => {
-    // Haptic feedback for destructive action
-    Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium);
-    
+    if (!IS_OFFLINE_MODE) Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium);
     Alert.alert(
       "Delete Task Permanently",
       "Are you sure you want to permanently delete this completed task? This action cannot be undone.",
@@ -41,7 +40,7 @@ export const CompletedTaskItem = ({ task, onRestore, onDelete, selectMode = fals
               await cancelTaskNotifications(task.id);
               await onDelete(task.id);
               // Success feedback
-              Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
+              if (!IS_OFFLINE_MODE) Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
               Alert.alert('Success', '🌿 Your Plant has been permanently cleared! Your garden is ready for new growth!');
             } catch (error) {
               console.error('Error in handleDelete:', error);
@@ -56,7 +55,7 @@ export const CompletedTaskItem = ({ task, onRestore, onDelete, selectMode = fals
   
   const handleRestore = () => {
     // Haptic feedback for restore action
-    Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
+    if (!IS_OFFLINE_MODE) Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
     onRestore(task.id);
   };
   

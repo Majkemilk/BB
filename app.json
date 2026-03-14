@@ -8,6 +8,7 @@
     "scheme": "plantascape",
     "userInterfaceStyle": "automatic",
     "newArchEnabled": true,
+    "sdkVersion": "54.0.0",
     "ios": {
       "supportsTablet": true,
       "bundleIdentifier": "com.bloomboard.app",
@@ -24,6 +25,8 @@
       "package": "com.bloomboard.app",
       "edgeToEdgeEnabled": true,
       "permissions": [
+        "android.permission.READ_CALENDAR",
+        "android.permission.WRITE_CALENDAR",
         "android.permission.READ_CALENDAR",
         "android.permission.WRITE_CALENDAR"
       ],
@@ -67,6 +70,12 @@
       "EXPO_PUBLIC_GOOGLE_WEB_CLIENT_ID": "1068788791945-i7hn2ahmclsbtig16g1cm9jkcvepopk0.apps.googleusercontent.com",
       "EXPO_PUBLIC_GOOGLE_ANDROID_CLIENT_ID": "1068788791945-deu06ru464guhsnhrtpj7e09i5dk8a5u.apps.googleusercontent.com",
       "EXPO_PUBLIC_GOOGLE_IOS_CLIENT_ID": "1068788791945-u2oa5ciqacpkd41ls2hjia7d629oe8oe.apps.googleusercontent.com"
+    },
+    "runtimeVersion": {
+      "policy": "appVersion"
+    },
+    "updates": {
+      "url": "https://u.expo.dev/8e958367-8920-4c4a-87ea-686765174a76"
     }
   }
 }

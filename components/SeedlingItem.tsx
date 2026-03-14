@@ -1,4 +1,5 @@
 import * as Haptics from 'expo-haptics';
+import { IS_OFFLINE_MODE } from '../utils/featureFlags';
 import { ChevronUp, GitMerge, Leaf, MoreHorizontal, Pencil, Repeat, Sprout, Trash2 } from 'lucide-react-native';
 import React, { useState } from 'react';
 import { Alert, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
@@ -31,7 +32,7 @@ export const SeedlingItem = ({
 
   const handleDelete = () => {
     // Haptic feedback for destructive action
-    Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium);
+    if (!IS_OFFLINE_MODE) Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium);
     
     Alert.alert(
       'Delete Seedling Template',
@@ -171,7 +172,7 @@ export const SeedlingItem = ({
           <TouchableOpacity
             style={styles.growButton}
             onPress={() => {
-              Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
+              if (!IS_OFFLINE_MODE) Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
               onPlant(template);
             }}
             activeOpacity={0.7}
@@ -183,7 +184,7 @@ export const SeedlingItem = ({
           <TouchableOpacity
             style={styles.tendButton}
             onPress={() => {
-              Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
+              if (!IS_OFFLINE_MODE) Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
               onEdit(template);
             }}
             activeOpacity={0.7}

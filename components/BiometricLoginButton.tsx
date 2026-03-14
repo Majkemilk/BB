@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { StyleSheet, Text, TouchableOpacity } from 'react-native';
 import { checkBiometricCapabilities, getBiometricIcon } from '../utils/biometricAuth';
+import { IS_OFFLINE_MODE } from '../utils/featureFlags';
 
 interface BiometricLoginButtonProps {
   onPress: () => void;
@@ -17,6 +18,10 @@ export const BiometricLoginButton: React.FC<BiometricLoginButtonProps> = ({
   const [biometricIcon, setBiometricIcon] = useState('🔐');
 
   useEffect(() => {
+    if (IS_OFFLINE_MODE) {
+      setIsAvailable(false);
+      return;
+    }
     const checkAvailability = async () => {
       const capabilities = await checkBiometricCapabilities();
       const available = capabilities.hasHardware && capabilities.isEnrolled;

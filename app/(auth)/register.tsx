@@ -12,6 +12,7 @@ import {
     TouchableOpacity,
     View
 } from 'react-native';
+import { useAuth } from '../../contexts/AuthContext';
 import { PasswordRequirements } from '../../components/PasswordRequirements';
 import { SocialLoginButtons } from '../../components/SocialLoginButtons';
 // import { configureGoogleSignIn, signInWithGoogle } from '../../utils/googleAuth';
@@ -19,6 +20,7 @@ import { validatePassword } from '../../utils/passwordValidation';
 import { supabase } from '../../utils/supabase';
 
 export default function RegisterScreen() {
+  const { signInOffline } = useAuth();
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
@@ -92,10 +94,8 @@ export default function RegisterScreen() {
     try {
       const { signInWithGoogle } = await import('../../utils/googleAuth');
       const result = await signInWithGoogle();
-      
       if (result.success) {
         console.log('Google sign-in successful:', result.user?.email);
-        // Navigation is handled by RootLayout once AuthContext updates
       } else {
         Alert.alert('Google Sign-In Error', result.error || 'Google sign-in failed');
       }
@@ -104,6 +104,15 @@ export default function RegisterScreen() {
       console.error('Google sign-in error:', error);
     } finally {
       setGoogleLoading(false);
+    }
+  };
+
+  const handleContinueWithoutLogin = async () => {
+    try {
+      await signInOffline();
+    } catch (e) {
+      console.error('signInOffline error:', e);
+      Alert.alert('Błąd', 'Nie udało się wejść w tryb offline.');
     }
   };
 
@@ -173,12 +182,20 @@ export default function RegisterScreen() {
             )}
           </TouchableOpacity>
 
-          {/* Social Login Buttons */}
+          {/* Social Login Buttons (Google tymczasowo wyłączony) */}
           <SocialLoginButtons
             onGooglePress={handleGoogleSignIn}
             loading={googleLoading}
             disabled={loading}
           />
+
+          <TouchableOpacity
+            style={[styles.continueWithoutButton, (loading || googleLoading) && styles.buttonDisabled]}
+            onPress={handleContinueWithoutLogin}
+            disabled={loading || googleLoading}
+          >
+            <Text style={styles.continueWithoutButtonText}>Kontynuuj bez logowania</Text>
+          </TouchableOpacity>
 
           <View style={styles.footer}>
             <Text style={styles.footerText}>Already have an account? </Text>
@@ -303,6 +320,21 @@ const styles = StyleSheet.create({
     fontSize: 16,
     fontWeight: '600',
     color: '#333',
+  },
+  continueWithoutButton: {
+    backgroundColor: 'transparent',
+    borderRadius: 12,
+    paddingVertical: 14,
+    paddingHorizontal: 20,
+    alignItems: 'center',
+    marginTop: 12,
+    borderWidth: 1,
+    borderColor: '#34C759',
+  },
+  continueWithoutButtonText: {
+    color: '#34C759',
+    fontSize: 16,
+    fontWeight: '600',
   },
   footer: {
     flexDirection: 'row',

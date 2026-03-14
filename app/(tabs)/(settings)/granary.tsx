@@ -4,6 +4,7 @@ import { useAuth } from '@/contexts/AuthContext';
 import { useTasks } from '@/contexts/TaskContext';
 import { cancelTaskNotifications } from '@/utils/notifications';
 import * as Haptics from 'expo-haptics';
+import { IS_OFFLINE_MODE } from '../../../utils/featureFlags';
 import { useRouter } from 'expo-router';
 import { CircleCheck as CheckCircle2, LucideIcon, MapPinned, RotateCcw, Search, SortAsc, Tag, Trash2, Wheat } from 'lucide-react-native';
 import React, { useMemo, useState } from 'react';
@@ -201,11 +202,11 @@ export default function GranaryScreen() {
               // Show appropriate success/error message
               if (successCount > 0 && errorCount === 0) {
                 // All successful
-                Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
+                if (!IS_OFFLINE_MODE) Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
                 Alert.alert('Success', `🌿 ${successCount} task${successCount === 1 ? ' has' : 's have'} been permanently cleared! Your garden is ready for new growth!`);
               } else if (successCount > 0 && errorCount > 0) {
                 // Partial success
-                Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
+                if (!IS_OFFLINE_MODE) Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
                 Alert.alert('Partial Success', `🌿 ${successCount} task${successCount === 1 ? ' has' : 's have'} been permanently cleared! ${errorCount} failed to delete.`);
               } else {
                 // All failed
@@ -255,7 +256,7 @@ export default function GranaryScreen() {
             setSelectMode(false);
             
             // Success message for bulk restore
-            Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
+            if (!IS_OFFLINE_MODE) Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
             Alert.alert('Success', `🌱 ${selectedTaskIds.length} task(s) have been restored! They're growing again in the Action Garden!`);
           },
         },

@@ -4,6 +4,7 @@ import { scheduleTaskNotifications } from '@/utils/notifications';
 import { ResponsiveUtils } from '@/utils/responsive';
 import DateTimePicker from '@react-native-community/datetimepicker';
 import * as Haptics from 'expo-haptics';
+import { IS_OFFLINE_MODE } from '../utils/featureFlags';
 import { useRouter } from 'expo-router';
 import { ArrowUpRight, Check, ChevronDown, ChevronUp, Clock, Coffee, Flame, Flower, Leaf, MapPinned, Pencil, PlusCircle, Repeat, Star, Tag, Trash2, X } from 'lucide-react-native';
 import React, { useEffect, useRef, useState } from 'react';
@@ -292,7 +293,7 @@ export default function NewTaskModal({ visible, onClose, onAdd, task, initialDat
     }
     
     // Haptic feedback for important actions
-    Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium);
+    if (!IS_OFFLINE_MODE) Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium);
     // If editing a recurring task (but NOT a seedling template), show simplified option
     if (task && !isEditingSeedling && (task.recurrence || task.parentTaskId || task.isRecurringTemplate)) {
       Alert.alert(
@@ -355,18 +356,18 @@ export default function NewTaskModal({ visible, onClose, onAdd, task, initialDat
         onTransplantSuccess();
       } else if (!task && !initialData && !isEditingSeedling && modalMode === 'create') {
         // Seedling template creation success
-        Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
+        if (!IS_OFFLINE_MODE) Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
         Alert.alert('Success', '🌸 Your Seedling template has grown into a Plant! Ready for action in the Action Garden!');
       } else if (!task && !initialData && !isEditingSeedling && !onTransplantSuccess && modalMode === 'create') {
         // Direct task creation success (not from wildflower, not from replant, not from cultivate)
-        Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
+        if (!IS_OFFLINE_MODE) Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
         Alert.alert('Success', '🌱 Your new Plant is growing in the Action Garden! Keep an eye on your task!');
       } else if (isEditingSeedling) {
         // Edit seedling template success - handled by addTemplate in TaskContext
         // No additional success message needed here
       } else if (task && !isEditingSeedling) {
         // Edit task success
-        Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
+        if (!IS_OFFLINE_MODE) Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
         Alert.alert('Success', '🌸 Your Plant has been tended to! It\'s looking healthier than ever!');
       }
       
@@ -426,7 +427,7 @@ export default function NewTaskModal({ visible, onClose, onAdd, task, initialDat
     };
     addTemplate({ name: name.trim(), taskData });
     setIsNameTemplateModalVisible(false);
-    Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
+    if (!IS_OFFLINE_MODE) Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
     Alert.alert('Success', `🌿 Your Plant has been saved as a Seedling template! Ready to grow again!`);
     onClose(); // Close the main modal after saving seedling
   };

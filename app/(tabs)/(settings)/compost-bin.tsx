@@ -3,6 +3,7 @@ import { FilterModal } from '@/components/FilterModal';
 import { useAuth } from '@/contexts/AuthContext';
 import { useTasks, Wildflower } from '@/contexts/TaskContext';
 import * as Haptics from 'expo-haptics';
+import { IS_OFFLINE_MODE } from '../../../utils/featureFlags';
 import { useRouter } from 'expo-router';
 import { Archive, CircleCheck as CheckCircle2, LucideIcon, RefreshCw, Search, SortAsc, Trash2 } from 'lucide-react-native';
 import React, { useMemo, useState } from 'react';
@@ -150,11 +151,11 @@ export default function CompostBinScreen() {
               // Show appropriate success/error message
               if (successCount > 0 && errorCount === 0) {
                 // All successful
-                Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
+                if (!IS_OFFLINE_MODE) Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
                 Alert.alert('Success', `🌸 ${successCount} wildflower${successCount === 1 ? ' has' : 's have'} been restored! They're blooming again in the Idea Meadow!`);
               } else if (successCount > 0 && errorCount > 0) {
                 // Partial success
-                Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
+                if (!IS_OFFLINE_MODE) Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
                 Alert.alert('Partial Success', `🌸 ${successCount} wildflower${successCount === 1 ? ' has' : 's have'} been restored! ${errorCount} failed to restore.`);
               } else {
                 // All failed
@@ -209,7 +210,7 @@ export default function CompostBinScreen() {
               if (successCount > 0 && errorCount === 0) {
                 // All successful
                 try {
-                  Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
+                  if (!IS_OFFLINE_MODE) Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
                 } catch (hapticError) {
                   console.log('Haptic feedback not available:', hapticError);
                 }
@@ -217,7 +218,7 @@ export default function CompostBinScreen() {
               } else if (successCount > 0 && errorCount > 0) {
                 // Partial success
                 try {
-                  Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
+                  if (!IS_OFFLINE_MODE) Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
                 } catch (hapticError) {
                   console.log('Haptic feedback not available:', hapticError);
                 }

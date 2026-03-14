@@ -1,5 +1,6 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import * as StoreReview from 'expo-store-review';
+import { IS_OFFLINE_MODE } from './featureFlags';
 
 const COUNTERS_KEY = 'review_action_counters';
 
@@ -25,8 +26,8 @@ export async function incrementActionCounter(actionType: 'task_completed' | 'key
 
 // Placeholder: decide whether to show the review prompt
 export async function requestReviewIfAppropriate() {
+  if (IS_OFFLINE_MODE) return;
   try {
-    // Pre-checks
     const isAvailable = await StoreReview.isAvailableAsync();
     if (!isAvailable) return;
 
@@ -40,7 +41,7 @@ export async function requestReviewIfAppropriate() {
       (tasks_completed > 0 && tasks_completed % 10 === 0) ||
       (key_plants_completed > 0 && key_plants_completed % 3 === 0);
 
-    if (shouldPrompt) {
+    if (shouldPrompt && !IS_OFFLINE_MODE) {
       await StoreReview.requestReview();
     }
   } catch (e) {

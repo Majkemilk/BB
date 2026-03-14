@@ -1,6 +1,7 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import Constants from 'expo-constants';
 import { Platform } from 'react-native';
+import { IS_OFFLINE_MODE } from './featureFlags';
 
 // Ważne: Usunęliśmy "import * as Notifications..." stąd
 
@@ -28,15 +29,15 @@ interface Task {
   completedAt?: Date;
 }
 
-// Ustawiamy domyślny, pusty handler, żeby aplikacja się nie zepsuła, gdy powiadomienia nie są załadowane
-// Ta linia jest bezpieczna i nie powoduje błędu
-require('expo-notifications').setNotificationHandler({
-  handleNotification: async () => ({
-    shouldShowAlert: true,
-    shouldPlaySound: true,
-    shouldSetBadge: true,
-  }),
-});
+if (!IS_OFFLINE_MODE) {
+  require('expo-notifications').setNotificationHandler({
+    handleNotification: async () => ({
+      shouldShowAlert: true,
+      shouldPlaySound: true,
+      shouldSetBadge: true,
+    }),
+  });
+}
 
 // Schedule notifications based on task priority and due date
 export async function scheduleTaskNotifications(
@@ -45,10 +46,7 @@ export async function scheduleTaskNotifications(
   priority: TaskPriority,
   dueDate: Date
 ) {
-  if (!Constants.isDevice) {
-    return;
-  }
-
+  if (IS_OFFLINE_MODE || !Constants.isDevice) return;
   const Notifications = require('expo-notifications');
 
   if (Platform.OS === 'web') {
@@ -148,10 +146,7 @@ export async function scheduleTaskNotifications(
 
 // NEW: Schedule daily overdue summary notification
 export async function scheduleDailyOverdueSummary(tasks: Task[]) {
-  if (!Constants.isDevice) {
-    return;
-  }
-
+  if (IS_OFFLINE_MODE || !Constants.isDevice) return;
   const Notifications = require('expo-notifications');
 
   if (Platform.OS === 'web') {
@@ -240,10 +235,7 @@ export async function scheduleDailyOverdueSummary(tasks: Task[]) {
 
 // NEW: Cancel daily overdue summary notifications
 export async function cancelDailyOverdueSummary() {
-  if (!Constants.isDevice) {
-    return;
-  }
-
+  if (IS_OFFLINE_MODE || !Constants.isDevice) return;
   const Notifications = require('expo-notifications');
   
   if (Platform.OS === 'web') return;
@@ -260,11 +252,7 @@ export async function cancelDailyOverdueSummary() {
 
 // Cancel all notifications for a specific task
 export async function cancelTaskNotifications(taskId: string) {
-  if (!Constants.isDevice) {
-    return;
-  }
-
-  // Dynamiczny import - moduł jest ładowany tylko tutaj, w bezpiecznych warunkach
+  if (IS_OFFLINE_MODE || !Constants.isDevice) return;
   const Notifications = require('expo-notifications');
   
   if (Platform.OS === 'web') return;

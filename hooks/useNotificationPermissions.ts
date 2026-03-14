@@ -1,6 +1,7 @@
 import * as Notifications from 'expo-notifications';
 import { useEffect, useState } from 'react';
 import { Platform } from 'react-native';
+import { IS_OFFLINE_MODE } from '../utils/featureFlags';
 
 export interface NotificationPermissionStatus {
   granted: boolean;
@@ -13,6 +14,11 @@ export function useNotificationPermissions() {
   const [isLoading, setIsLoading] = useState(true);
 
   const checkPermissions = async (): Promise<NotificationPermissionStatus> => {
+    if (IS_OFFLINE_MODE) {
+      const fallback = { granted: false, canAskAgain: false, status: 'denied' as Notifications.PermissionStatus };
+      setPermissionStatus(fallback);
+      return fallback;
+    }
     try {
       const { status, canAskAgain } = await Notifications.getPermissionsAsync();
       
@@ -37,10 +43,14 @@ export function useNotificationPermissions() {
   };
 
   const requestPermissions = async (): Promise<NotificationPermissionStatus> => {
+    if (IS_OFFLINE_MODE) {
+      const fallback = { granted: false, canAskAgain: false, status: 'denied' as Notifications.PermissionStatus };
+      setPermissionStatus(fallback);
+      return fallback;
+    }
     try {
       setIsLoading(true);
       
-      // Check current permissions first
       const currentStatus = await checkPermissions();
       
       // If already granted, return current status
@@ -56,7 +66,6 @@ export function useNotificationPermissions() {
         return currentStatus;
       }
       
-      // Request permissions
       const { status, canAskAgain } = await Notifications.requestPermissionsAsync();
       
       const newPermissionStatus: NotificationPermissionStatus = {
@@ -89,10 +98,14 @@ export function useNotificationPermissions() {
   };
 
   const initializePermissions = async () => {
+    if (IS_OFFLINE_MODE) {
+      setPermissionStatus({ granted: false, canAskAgain: false, status: 'denied' as Notifications.PermissionStatus });
+      setIsLoading(false);
+      return;
+    }
     try {
       setIsLoading(true);
       
-      // Check if we're on a device that supports notifications
       if (Platform.OS === 'web') {
         console.log('Notifications not supported on web');
         setPermissionStatus({

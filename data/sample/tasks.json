@@ -1,0 +1,42 @@
+[
+  {
+    "id": "04ce3fc3-724d-495b-a02a-b5e9a73aa49a",
+    "user_id": "5162359d-d581-46ef-bbe7-fabc0ea212c8",
+    "title": "Repot the monstera plant",
+    "description": "",
+    "priority": "Later",
+    "context": "Home",
+    "plot": null,
+    "start_date": "2025-10-15T19:56:28.624+00:00",
+    "due_date": "2025-10-17T19:56:00+00:00",
+    "is_mit": false,
+    "is_completed": false,
+    "created_at": "2025-10-15T19:57:05.528206+00:00",
+    "completed_at": "2025-10-16T05:39:15.873+00:00",
+    "calendar_event_id": null,
+    "branches": [],
+    "recurrence": null,
+    "is_recurring_template": false,
+    "parent_task_id": null
+  },
+  {
+    "id": "06735713-2eca-49f1-b941-36ed1f8256fc",
+    "user_id": "116e9b3e-902e-4ad2-8571-0bd861223c21",
+    "title": "Perlatory odkamienić",
+    "description": "",
+    "priority": "Could-do",
+    "context": null,
+    "plot": null,
+    "start_date": null,
+    "due_date": null,
+    "is_mit": false,
+    "is_completed": true,
+    "created_at": "2026-01-03T08:34:14.557162+00:00",
+    "completed_at": "2026-01-03T08:34:19.724+00:00",
+    "calendar_event_id": null,
+    "branches": [],
+    "recurrence": null,
+    "is_recurring_template": false,
+    "parent_task_id": null
+  }
+]

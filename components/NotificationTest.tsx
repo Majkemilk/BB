@@ -2,12 +2,17 @@ import * as Notifications from 'expo-notifications';
 import React from 'react';
 import { Alert, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import { useNotificationPermissions } from '../hooks/useNotificationPermissions';
+import { IS_OFFLINE_MODE } from '../utils/featureFlags';
 
 export function NotificationTest() {
   const { permissionStatus, requestPermissions } = useNotificationPermissions();
 
   const sendTestNotification = async () => {
     try {
+      if (IS_OFFLINE_MODE) {
+        Alert.alert('Offline Mode', 'Notifications are disabled in offline mode.');
+        return;
+      }
       if (!permissionStatus?.granted) {
         Alert.alert(
           'Permission Required',

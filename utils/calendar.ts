@@ -1,5 +1,6 @@
 import { Task } from '@/contexts/TaskContext';
 import * as Calendar from 'expo-calendar';
+import { IS_OFFLINE_MODE } from './featureFlags';
 
 /**
  * Format a calendar event title from a Task.
@@ -20,9 +21,7 @@ export function formatEventTitle(task: Task): string {
  * Sync a Task to the device's calendar. Returns eventId on success, null on failure or if no dueDate.
  */
 export async function syncTaskToCalendar(task: Task): Promise<string | null> {
-  if (!task.dueDate) return null;
-
-  // Check/request permissions
+  if (IS_OFFLINE_MODE || !task.dueDate) return null;
   let permStatus: Calendar.PermissionStatus;
   try {
     const { status } = await Calendar.getCalendarPermissionsAsync();
@@ -69,6 +68,7 @@ export async function syncTaskToCalendar(task: Task): Promise<string | null> {
  * Delete a calendar event by eventId. Returns true on success, false on failure.
  */
 export async function deleteCalendarEvent(eventId: string): Promise<boolean> {
+  if (IS_OFFLINE_MODE) return false;
   try {
     await Calendar.deleteEventAsync(eventId);
     return true;

@@ -6,7 +6,9 @@ import TemplateChooserModal from '@/components/TemplateChooserModal';
 import { useAuth } from '@/contexts/AuthContext';
 import { useTasks } from '@/contexts/TaskContext';
 import { useFocusEffect } from '@react-navigation/native';
+import * as Haptics from 'expo-haptics';
 import { useRouter } from 'expo-router';
+import { IS_OFFLINE_MODE } from '../../utils/featureFlags';
 import { ArrowUpRight, Calendar, ChevronDown, MapPinned, Plus, Search, SortAsc, Star, Tag } from 'lucide-react-native';
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import { Alert, FlatList, Modal, StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native';
@@ -202,7 +204,7 @@ export default function ActionGardenScreen() {
         
         // Show success message for new task creation
         try {
-          Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
+          if (!IS_OFFLINE_MODE) Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
         } catch (hapticError) {
           // Haptic feedback not available
         }
