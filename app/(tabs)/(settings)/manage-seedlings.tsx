@@ -1,7 +1,7 @@
-import NewTaskModal from '@/components/NewTaskModal';
-import { SeedlingItem } from '@/components/SeedlingItem';
-import { useAuth } from '@/contexts/AuthContext';
-import { Template, useTasks } from '@/contexts/TaskContext';
+import NewTaskModal from '../../../components/NewTaskModal';
+import { SeedlingItem } from '../../../components/SeedlingItem';
+import { useAuth } from '../../../contexts/AuthContext';
+import { Template, useTasks } from '../../../contexts/TaskContext';
 import { useRouter } from 'expo-router';
 import { Leaf, Plus } from 'lucide-react-native';
 import React, { useState } from 'react';

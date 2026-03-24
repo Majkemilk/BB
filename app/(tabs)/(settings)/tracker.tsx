@@ -1,4 +1,4 @@
-import { useTasks } from '@/contexts/TaskContext';
+import { useTasks } from '../../../contexts/TaskContext';
 import { ChartBar, Droplets, Flower, Heart, Sprout, Target } from 'lucide-react-native';
 import React, { useMemo } from 'react';
 import { ScrollView, StyleSheet, Text, View } from 'react-native';

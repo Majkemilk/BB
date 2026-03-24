@@ -1,5 +1,5 @@
-import { AutoBackup, BackupEntry } from '@/utils/autoBackup';
-import { DataExport } from '@/utils/dataExport';
+import { AutoBackup, BackupEntry } from '../utils/autoBackup';
+import { DataExport } from '../utils/dataExport';
 import { Clock, Download, HardDrive, Trash2, Upload, X } from 'lucide-react-native';
 import React, { useEffect, useState } from 'react';
 import {

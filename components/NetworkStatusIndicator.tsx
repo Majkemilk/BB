@@ -1,4 +1,4 @@
-import { useNetworkStatus } from '@/hooks/useNetworkStatus';
+import { useNetworkStatus } from '../hooks/useNetworkStatus';
 import { Wifi, WifiOff } from 'lucide-react-native';
 import React from 'react';
 import { Animated, StyleSheet, Text, View } from 'react-native';

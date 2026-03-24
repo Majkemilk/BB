@@ -1,4 +1,4 @@
-import type { Wildflower } from '@/types/wildflower';
+import type { Wildflower } from '../types/wildflower';
 import React, { memo, useCallback } from 'react';
 import { FlatList, ListRenderItem, StyleSheet, View } from 'react-native';
 import { WildflowerItem } from './WildflowerItem';

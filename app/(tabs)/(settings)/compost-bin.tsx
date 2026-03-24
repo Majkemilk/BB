@@ -1,7 +1,7 @@
-import { ArchivedWildflowerItem } from '@/components/ArchivedWildflowerItem';
-import { FilterModal } from '@/components/FilterModal';
-import { useAuth } from '@/contexts/AuthContext';
-import { useTasks, Wildflower } from '@/contexts/TaskContext';
+import ArchivedWildflowerItem from '../../../components/ArchivedWildflowerItem';
+import { FilterModal } from '../../../components/FilterModal';
+import { useAuth } from '../../../contexts/AuthContext';
+import { useTasks, Wildflower } from '../../../contexts/TaskContext';
 import * as Haptics from 'expo-haptics';
 import { IS_OFFLINE_MODE } from '../../../utils/featureFlags';
 import { useRouter } from 'expo-router';

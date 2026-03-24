@@ -1,6 +1,6 @@
-import PremiumLoadingIndicator from '@/components/PremiumLoadingIndicator';
-import { useAuth } from '@/contexts/AuthContext';
-import { IS_OFFLINE_MODE } from '@/utils/featureFlags';
+import PremiumLoadingIndicator from '../../../components/PremiumLoadingIndicator';
+import { useAuth } from '../../../contexts/AuthContext';
+import { IS_OFFLINE_MODE } from '../../../utils/featureFlags';
 import * as WebBrowser from 'expo-web-browser';
 import { CheckCircle, RefreshCw, Star } from 'lucide-react-native';
 import React, { useEffect, useState } from 'react';

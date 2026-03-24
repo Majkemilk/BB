@@ -1,4 +1,4 @@
-import { CrashReport, CrashReporter, CrashStats } from '@/utils/crashReporter';
+import { CrashReport, CrashReporter, CrashStats } from '../utils/crashReporter';
 import { Send, Trash2, X } from 'lucide-react-native';
 import React, { useEffect, useState } from 'react';
 import {

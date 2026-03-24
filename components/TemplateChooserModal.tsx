@@ -1,5 +1,5 @@
-import { useAuth } from '@/contexts/AuthContext';
-import { useTasks } from '@/contexts/TaskContext';
+import { useAuth } from '../contexts/AuthContext';
+import { useTasks } from '../contexts/TaskContext';
 import { useRouter } from 'expo-router';
 import { Flower, GitMerge, Leaf, Sprout, Star, X } from 'lucide-react-native';
 import React from 'react';

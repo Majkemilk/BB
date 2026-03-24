@@ -1,4 +1,4 @@
-import { useAuth } from '@/contexts/AuthContext';
+import { useAuth } from '../contexts/AuthContext';
 import { useRouter } from 'expo-router';
 import { Check, Plus, Search, X } from 'lucide-react-native';
 import React, { useMemo, useRef, useState } from 'react';

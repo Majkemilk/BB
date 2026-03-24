@@ -1,5 +1,5 @@
-import ProfileQuickModal from '@/components/ProfileQuickModal';
-import { ResponsiveUtils } from '@/utils/responsive';
+import ProfileQuickModal from '../../components/ProfileQuickModal';
+import { ResponsiveUtils } from '../../utils/responsive';
 import { Tabs } from 'expo-router';
 import { BookOpen, Flower, Settings, Sprout, User } from 'lucide-react-native';
 import { useState } from 'react';

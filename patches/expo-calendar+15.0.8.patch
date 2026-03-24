@@ -1,0 +1,28 @@
+diff --git a/node_modules/expo-calendar/ios/Requesters/CalendarPermissionsRequester.swift b/node_modules/expo-calendar/ios/Requesters/CalendarPermissionsRequester.swift
+index 8cffced..8030ebc 100644
+--- a/node_modules/expo-calendar/ios/Requesters/CalendarPermissionsRequester.swift
++++ b/node_modules/expo-calendar/ios/Requesters/CalendarPermissionsRequester.swift
+@@ -26,8 +26,7 @@ public class CalendarPermissionsRequester: NSObject, EXPermissionsRequester {
+     if Bundle.main.object(forInfoDictionaryKey: description) != nil {
+       permissions = EKEventStore.authorizationStatus(for: .event)
+     } else {
+-      EXFatal(MissingCalendarPListValueException(description))
+-      permissions = .denied
++      fatalError(MissingCalendarPListValueException(description).description)
+     }
+ 
+     switch permissions {
+diff --git a/node_modules/expo-calendar/ios/Requesters/RemindersPermissionsRequester.swift b/node_modules/expo-calendar/ios/Requesters/RemindersPermissionsRequester.swift
+index 8d2e801..c60eb04 100644
+--- a/node_modules/expo-calendar/ios/Requesters/RemindersPermissionsRequester.swift
++++ b/node_modules/expo-calendar/ios/Requesters/RemindersPermissionsRequester.swift
+@@ -26,8 +26,7 @@ public class RemindersPermissionRequester: NSObject, EXPermissionsRequester {
+     if Bundle.main.object(forInfoDictionaryKey: description) != nil {
+       permissions = EKEventStore.authorizationStatus(for: .reminder)
+     } else {
+-      EXFatal(MissingCalendarPListValueException(description))
+-      permissions = .denied
++      fatalError(MissingRemindersPListValueException(description).description)
+     }
+ 
+     switch permissions {

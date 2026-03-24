@@ -1,5 +1,5 @@
-import { useTasks } from '@/contexts/TaskContext';
-import { seedsData } from '@/data/seedsData';
+import { useTasks } from '../../contexts/TaskContext';
+import { seedsData } from '../../data/seedsData';
 import { BookOpen, Flower, Search } from 'lucide-react-native';
 import React, { useMemo, useState } from 'react';
 import { FlatList, StyleSheet, Text, TextInput, View } from 'react-native';

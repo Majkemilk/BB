@@ -1,4 +1,4 @@
-import { cancelTaskNotifications } from '@/utils/notifications';
+import { cancelTaskNotifications } from '../utils/notifications';
 import * as Haptics from 'expo-haptics';
 import { IS_OFFLINE_MODE } from '../utils/featureFlags';
 import { CircleCheck as CheckCircle, ChevronUp, Filter, Flame, LayoutGrid, MoreHorizontal, RotateCcw, Star, Trash2 } from 'lucide-react-native';

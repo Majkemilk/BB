@@ -1,4 +1,4 @@
-import { CrashReportModal } from '@/components/CrashReportModal';
+import { CrashReportModal } from '../../../components/CrashReportModal';
 import { Bug, Send, Trash2 } from 'lucide-react-native';
 import React, { useState } from 'react';
 import { ScrollView, StyleSheet, Text, TouchableOpacity, View } from 'react-native';

@@ -1,4 +1,4 @@
-import { useAuth } from '@/contexts/AuthContext';
+import { useAuth } from '../contexts/AuthContext';
 import * as Haptics from 'expo-haptics';
 import { IS_OFFLINE_MODE } from '../utils/featureFlags';
 import { useRouter } from 'expo-router';

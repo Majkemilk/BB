@@ -1,4 +1,4 @@
-import { ResponsiveUtils } from '@/utils/responsive';
+import { ResponsiveUtils } from '../utils/responsive';
 import * as Haptics from 'expo-haptics';
 import { IS_OFFLINE_MODE } from '../utils/featureFlags';
 import { ArrowUpRight, ChevronUp, MoreHorizontal, Pencil, Sprout, Trash2 } from 'lucide-react-native';

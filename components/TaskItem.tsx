@@ -1,5 +1,5 @@
-import { useTasks } from '@/contexts/TaskContext';
-import { cancelTaskNotifications } from '@/utils/notifications';
+import { useTasks } from '../contexts/TaskContext';
+import { cancelTaskNotifications } from '../utils/notifications';
 import * as Haptics from 'expo-haptics';
 import { IS_OFFLINE_MODE } from '../utils/featureFlags';
 import { Check, ChevronUp, Clock, Coffee, Flame, GitMerge, MoreHorizontal, Pencil, Repeat, Star, Trash2 } from 'lucide-react-native';

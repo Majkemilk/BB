@@ -1,8 +1,8 @@
-import { CompletedTaskItem } from '@/components/CompletedTaskItem';
-import { FilterModal } from '@/components/FilterModal';
-import { useAuth } from '@/contexts/AuthContext';
-import { useTasks } from '@/contexts/TaskContext';
-import { cancelTaskNotifications } from '@/utils/notifications';
+import { CompletedTaskItem } from '../../../components/CompletedTaskItem';
+import { FilterModal } from '../../../components/FilterModal';
+import { useAuth } from '../../../contexts/AuthContext';
+import { useTasks } from '../../../contexts/TaskContext';
+import { cancelTaskNotifications } from '../../../utils/notifications';
 import * as Haptics from 'expo-haptics';
 import { IS_OFFLINE_MODE } from '../../../utils/featureFlags';
 import { useRouter } from 'expo-router';

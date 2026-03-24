@@ -1,10 +1,10 @@
-import { FilterModal } from '@/components/FilterModal';
-import { MultiSelectFilterModal } from '@/components/MultiSelectFilterModal';
-import NewTaskModal from '@/components/NewTaskModal';
-import { TaskItem } from '@/components/TaskItem';
-import TemplateChooserModal from '@/components/TemplateChooserModal';
-import { useAuth } from '@/contexts/AuthContext';
-import { useTasks } from '@/contexts/TaskContext';
+import { FilterModal } from '../../components/FilterModal';
+import { MultiSelectFilterModal } from '../../components/MultiSelectFilterModal';
+import NewTaskModal from '../../components/NewTaskModal';
+import { TaskItem } from '../../components/TaskItem';
+import TemplateChooserModal from '../../components/TemplateChooserModal';
+import { useAuth } from '../../contexts/AuthContext';
+import { useTasks } from '../../contexts/TaskContext';
 import { useFocusEffect } from '@react-navigation/native';
 import * as Haptics from 'expo-haptics';
 import { useRouter } from 'expo-router';
@@ -44,7 +44,7 @@ export default function ActionGardenScreen() {
     tasks, 
     toggleTaskComplete, 
     toggleMIT, 
-    deleteTask, 
+    deleteTask,
     updateTask,
     addTask,
     contexts,
@@ -100,7 +100,6 @@ export default function ActionGardenScreen() {
           : [...currentFilters, option]
       };
       
-      // Update filterModal.activeOptions immediately for live UI update
       setFilterModal(modal => ({
         ...modal,
         activeOptions: newFilters[type]
@@ -113,7 +112,6 @@ export default function ActionGardenScreen() {
   const clearFilters = (type: 'priority' | 'dueDate' | 'context' | 'plot') => {
     setActiveFilters(prev => ({ ...prev, [type]: [] }));
     
-    // Update filterModal.activeOptions immediately
     setFilterModal(modal => ({
       ...modal,
       activeOptions: []
@@ -148,7 +146,6 @@ export default function ActionGardenScreen() {
   };
 
   const toggleNewTaskModal = () => {
-    // Check task limit for non-premium users
     const taskLimit = 30;
     const activeTasks = tasks.filter(task => !task.isCompleted);
     
@@ -181,7 +178,6 @@ export default function ActionGardenScreen() {
 
   const handleAddTask = async (taskData: any) => {
     try {
-      // Check task limit for non-premium users BEFORE creating task
       const taskLimit = 30;
       const activeTasks = tasks.filter(task => !task.isCompleted);
       
@@ -202,12 +198,14 @@ export default function ActionGardenScreen() {
       } else {
         await addTask(taskData);
         
-        // Show success message for new task creation
         try {
-          if (!IS_OFFLINE_MODE) Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
+          if (!IS_OFFLINE_MODE) {
+            Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
+          }
         } catch (hapticError) {
           // Haptic feedback not available
         }
+
         Alert.alert('Success', '🌱 Your new Plant is growing in the Action Garden! Keep an eye on your task!');
       }
     } catch (error) {
@@ -224,43 +222,73 @@ export default function ActionGardenScreen() {
     setShowTransplantInfo(true);
   };
 
-  const isTaskDueToday = (dueDate: any) => { if (!dueDate) return false; const today = new Date(); today.setHours(0, 0, 0, 0); const taskDate = new Date(dueDate); taskDate.setHours(0, 0, 0, 0); return taskDate.getTime() === today.getTime(); };
-  const isTaskDueTomorrow = (dueDate: any) => { if (!dueDate) return false; const tomorrow = new Date(); tomorrow.setDate(tomorrow.getDate() + 1); tomorrow.setHours(0, 0, 0, 0); const taskDate = new Date(dueDate); taskDate.setHours(0, 0, 0, 0); return taskDate.getTime() === tomorrow.getTime(); };
-  const isTaskDueThisWeek = (dueDate: any) => { if (!dueDate) return false; const today = new Date(); const taskDate = new Date(dueDate); const nextWeek = new Date(today.getTime() + 7 * 24 * 60 * 60 * 1000); return taskDate > today && taskDate <= nextWeek; };
-  const isTaskOverdue = (dueDate: any) => { if (!dueDate) return false; const today = new Date(); today.setHours(0, 0, 0, 0); const taskDate = new Date(dueDate); taskDate.setHours(0, 0, 0, 0); return taskDate < today; };
+  const isTaskDueToday = (dueDate: any) => {
+    if (!dueDate) return false;
+    const today = new Date();
+    today.setHours(0, 0, 0, 0);
+    const taskDate = new Date(dueDate);
+    taskDate.setHours(0, 0, 0, 0);
+    return taskDate.getTime() === today.getTime();
+  };
+
+  const isTaskDueTomorrow = (dueDate: any) => {
+    if (!dueDate) return false;
+    const tomorrow = new Date();
+    tomorrow.setDate(tomorrow.getDate() + 1);
+    tomorrow.setHours(0, 0, 0, 0);
+    const taskDate = new Date(dueDate);
+    taskDate.setHours(0, 0, 0, 0);
+    return taskDate.getTime() === tomorrow.getTime();
+  };
+
+  const isTaskDueThisWeek = (dueDate: any) => {
+    if (!dueDate) return false;
+    const today = new Date();
+    const taskDate = new Date(dueDate);
+    const nextWeek = new Date(today.getTime() + 7 * 24 * 60 * 60 * 1000);
+    return taskDate > today && taskDate <= nextWeek;
+  };
+
+  const isTaskOverdue = (dueDate: any) => {
+    if (!dueDate) return false;
+    const today = new Date();
+    today.setHours(0, 0, 0, 0);
+    const taskDate = new Date(dueDate);
+    taskDate.setHours(0, 0, 0, 0);
+    return taskDate < today;
+  };
 
   const filteredTasks = useMemo(() => tasks.filter(task => {
     if (task.isCompleted) return false;
-    
-    // Search filter
+
     const query = searchQuery.toLowerCase();
-    const matchesSearch = query === '' || task.title.toLowerCase().includes(query) || (task.description && task.description.toLowerCase().includes(query));
+    const matchesSearch =
+      query === '' ||
+      task.title.toLowerCase().includes(query) ||
+      (task.description && task.description.toLowerCase().includes(query));
+
     if (!matchesSearch) return false;
-    
-    // Priority filter (multi-select)
+
     const priorityFilters = activeFilters.priority;
     if (priorityFilters.length > 0) {
       const taskPriority = task.isMIT ? 'Key Plant' : task.priority;
       if (!priorityFilters.includes(taskPriority)) return false;
     }
-    
-    // Context filter (multi-select)
+
     const contextFilters = activeFilters.context;
     if (contextFilters.length > 0) {
       if (!task.context || !contextFilters.includes(task.context)) return false;
     }
-    
-    // Plot filter (multi-select)
+
     const plotFilters = activeFilters.plot;
     if (plotFilters.length > 0) {
       if (!task.plot || !plotFilters.includes(task.plot)) return false;
     }
-    
-    // Due Date filter (multi-select)
+
     const dueDateFilters = activeFilters.dueDate;
     if (dueDateFilters.length > 0) {
       let matchesDueDate = false;
-      
+
       for (const filter of dueDateFilters) {
         switch (filter) {
           case 'Due Today':
@@ -273,12 +301,20 @@ export default function ActionGardenScreen() {
             if (isTaskDueThisWeek(task.dueDate)) matchesDueDate = true;
             break;
           case 'Later':
-            if (task.dueDate && !isTaskDueToday(task.dueDate) && !isTaskDueTomorrow(task.dueDate) && !isTaskDueThisWeek(task.dueDate) && !isTaskOverdue(task.dueDate)) matchesDueDate = true;
+            if (
+              task.dueDate &&
+              !isTaskDueToday(task.dueDate) &&
+              !isTaskDueTomorrow(task.dueDate) &&
+              !isTaskDueThisWeek(task.dueDate) &&
+              !isTaskOverdue(task.dueDate)
+            ) {
+              matchesDueDate = true;
+            }
             break;
           case 'Overdue':
             if (isTaskOverdue(task.dueDate)) matchesDueDate = true;
             break;
-          case 'Start Today':
+          case 'Start Today': {
             const today = new Date();
             today.setHours(0, 0, 0, 0);
             if (task.startDate) {
@@ -287,13 +323,15 @@ export default function ActionGardenScreen() {
               if (startDate <= today) matchesDueDate = true;
             }
             break;
+          }
         }
+
         if (matchesDueDate) break;
       }
-      
+
       if (!matchesDueDate) return false;
     }
-    
+
     return true;
   }), [tasks, activeFilters, searchQuery]);
 
@@ -420,7 +458,6 @@ export default function ActionGardenScreen() {
     setIsNewTaskModalVisible(true);
     setIsTemplateChooserVisible(false);
   };
-
   return (
     <View style={styles.container}>
       <FlatList
@@ -448,8 +485,8 @@ export default function ActionGardenScreen() {
         )}
       />
 
-      <TouchableOpacity 
-        style={styles.fabButton} 
+      <TouchableOpacity
+        style={styles.fabButton}
         onPress={handleFabPress}
         accessibilityLabel="Create new task"
       >
@@ -477,7 +514,7 @@ export default function ActionGardenScreen() {
         addPlot={addPlot}
         onTransplantSuccess={handleTransplantSuccess}
       />
-      
+
       <MultiSelectFilterModal
         visible={filterModal.visible}
         onClose={() => setFilterModal(prev => ({ ...prev, visible: false }))}
@@ -487,7 +524,6 @@ export default function ActionGardenScreen() {
         onToggle={(option) => filterModal.filterType && toggleFilter(filterModal.filterType, option)}
         onClear={() => filterModal.filterType && clearFilters(filterModal.filterType)}
       />
-
       {sortModalVisible && (
         <FilterModal
           visible={sortModalVisible}
@@ -557,21 +593,21 @@ const styles = StyleSheet.create({
   emptyContainer: { flex: 1, paddingTop: 100, justifyContent: 'flex-start', alignItems: 'center', paddingHorizontal: 40 },
   emptyText: { fontSize: 18, fontWeight: '600', color: '#1A1A1A', textAlign: 'center' },
   emptySubtext: { marginTop: 8, fontSize: 15, color: '#666666', textAlign: 'center' },
-  fabButton: { 
-    position: 'absolute', 
-    bottom: 24, 
-    right: 24, 
-    width: 56, 
-    height: 56, 
-    borderRadius: 28, 
-    backgroundColor: '#4CAF50', 
-    alignItems: 'center', 
-    justifyContent: 'center', 
-    shadowColor: '#000000', 
-    shadowOffset: { width: 0, height: 4 }, 
-    shadowOpacity: 0.3, 
-    shadowRadius: 6, 
-    elevation: 8, 
+  fabButton: {
+    position: 'absolute',
+    bottom: 24,
+    right: 24,
+    width: 56,
+    height: 56,
+    borderRadius: 28,
+    backgroundColor: '#4CAF50',
+    alignItems: 'center',
+    justifyContent: 'center',
+    shadowColor: '#000000',
+    shadowOffset: { width: 0, height: 4 },
+    shadowOpacity: 0.3,
+    shadowRadius: 6,
+    elevation: 8,
   },
   sortSection: { backgroundColor: '#FFFFFF', padding: 8, paddingHorizontal: 16, borderBottomWidth: 1, borderBottomColor: '#E8F5E9' },
   sortButton: { flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', padding: 12, backgroundColor: '#F8F9FA', borderRadius: 8 },

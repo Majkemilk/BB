@@ -1,7 +1,7 @@
-import { useAuth } from '@/contexts/AuthContext';
-import { Task, useTasks } from '@/contexts/TaskContext';
-import { scheduleTaskNotifications } from '@/utils/notifications';
-import { ResponsiveUtils } from '@/utils/responsive';
+import { useAuth } from '../contexts/AuthContext';
+import { Task, useTasks } from '../contexts/TaskContext';
+import { scheduleTaskNotifications } from '../utils/notifications';
+import { ResponsiveUtils } from '../utils/responsive';
 import DateTimePicker from '@react-native-community/datetimepicker';
 import * as Haptics from 'expo-haptics';
 import { IS_OFFLINE_MODE } from '../utils/featureFlags';
@@ -14,7 +14,7 @@ import NameTemplateModal from './NameTemplateModal';
 import RecurrenceModal from './RecurrenceModal';
 
 // Zakładamy, że ta funkcja jest zakomentowana globalnie
-// import { scheduleTaskNotifications } from '@/utils/notifications';
+// import { scheduleTaskNotifications } from '../utils/notifications';
 
 interface NewTaskModalProps {
   visible: boolean;
@@ -1467,5 +1467,5 @@ const styles = StyleSheet.create({
   },
 });
 
-export { NewTaskModal };
+export default NewTaskModal;
 
