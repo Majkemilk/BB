@@ -1,0 +1,22 @@
+diff --git a/node_modules/expo-notifications/ios/EXNotifications/Badge/BadgeModule.swift b/node_modules/expo-notifications/ios/EXNotifications/Badge/BadgeModule.swift
+index 7a289c4..ab369cf 100644
+--- a/node_modules/expo-notifications/ios/EXNotifications/Badge/BadgeModule.swift
++++ b/node_modules/expo-notifications/ios/EXNotifications/Badge/BadgeModule.swift
+@@ -8,7 +8,7 @@ public class BadgeModule: Module {
+     Name("ExpoBadgeModule")
+ 
+     AsyncFunction("getBadgeCountAsync") { () -> Int in
+-      return EXSharedApplication().applicationIconBadgeNumber
++      return UIApplication.shared.applicationIconBadgeNumber
+     }
+     .runOnQueue(.main)
+ 
+@@ -22,7 +22,7 @@ public class BadgeModule: Module {
+           try await center.setBadgeCount(badgeCount)
+         } else {
+           await MainActor.run {
+-            EXSharedApplication().applicationIconBadgeNumber = badgeCount
++            UIApplication.shared.applicationIconBadgeNumber = badgeCount
+           }
+         }
+         return true
