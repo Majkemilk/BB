@@ -30,7 +30,6 @@
         "android.permission.READ_CALENDAR",
         "android.permission.WRITE_CALENDAR"
       ],
-      "googleServicesFile": "./google-services.json",
       "colors": {
         "iconBackground": "#ffffff"
       }
